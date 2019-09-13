@@ -36,6 +36,7 @@ class ColorLabeler:
 		mask = cv2.erode(mask, None, iterations=2)
 		mean = cv2.mean(image, mask=mask)[:3]
 
+
 		# initialize the minimum distance found thus far
 		minDist = (np.inf, None)
 
@@ -51,4 +52,6 @@ class ColorLabeler:
 				minDist = (d, i)
 
 		# return the name of the color with the smallest distance
+		print('colour: {}'.format(self.colorNames[minDist[1]]))
+		print('mean: {}'.format(mean))
 		return self.colorNames[minDist[1]]

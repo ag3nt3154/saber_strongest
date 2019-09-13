@@ -1,122 +1,107 @@
-# USAGE
-# python opencv_object_tracking.py
-# python opencv_object_tracking.py --video dashcam_boston.mp4 --tracker csrt
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-# import the necessary packages
-from imutils.video import VideoStream
-from imutils.video import FPS
-import argparse
-import imutils
-import time
+# USAGE: You need to specify a filter and "only one" image source
+#
+# (python) range-detector --filter RGB --image /path/to/image.png
+# or
+# (python) range-detector --filter HSV --webcam
+
 import cv2
-
-# construct the argument parser and parse the arguments
-
-
-# extract the OpenCV version info
-print(cv2.__version__)
-
-# otherwise, for OpenCV 3.3 OR NEWER, we need to explicity call the
-# approrpiate object tracker constructor:
-
-# initialize a dictionary that maps strings to their corresponding
-# OpenCV object tracker implementations
-OPENCV_OBJECT_TRACKERS = {
-    "csrt": cv2.TrackerCSRT_create,
-    "kcf": cv2.TrackerKCF_create,
-    "boosting": cv2.TrackerBoosting_create,
-    "mil": cv2.TrackerMIL_create,
-    "tld": cv2.TrackerTLD_create,
-    "medianflow": cv2.TrackerMedianFlow_create,
-    "mosse": cv2.TrackerMOSSE_create
-}
-
-# grab the appropriate object tracker using our dictionary of
-# OpenCV object tracker objects
-tracker = OPENCV_OBJECT_TRACKERS['csrt']()
-
-# initialize the bounding box coordinates of the object we are going
-# to track
-initBB = None
-
-# if a video path was not supplied, grab the reference to the web cam
-
-print("[INFO] starting video stream...")
-vs = VideoStream(src=0).start()
-time.sleep(1.0)
-
-# initialize the FPS throughput estimator
-fps = None
-
-# loop over frames from the video stream
-while True:
-    # grab the current frame, then handle if we are using a
-    # VideoStream or VideoCapture object
-    frame = vs.read()
-    frame = cv2.flip(frame, 1)
-
-    # check to see if we have reached the end of the stream
-    if frame is None:
-        break
-
-    # resize the frame (so we can process it faster) and grab the
-    # frame dimensions
-    frame = imutils.resize(frame, width=500)
-    (H, W) = frame.shape[:2]
-
-    # check to see if we are currently tracking an object
-    if initBB is not None:
-        print(initBB)
-        # grab the new bounding box coordinates of the object
-        (success, box) = tracker.update(frame)
-
-        # check to see if the tracking was a success
-        if success:
-            (x, y, w, h) = [int(v) for v in box]
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-        # update the FPS counter
-        fps.update()
-        fps.stop()
-
-        # initialize the set of information we'll be displaying on
-        # the frame
-        info = [
-            ("Tracker", 'csrt'),
-            ("Success", "Yes" if success else "No"),
-            ("FPS", "{:.2f}".format(fps.fps())),
-        ]
-
-        # loop over the info tuples and draw them on our frame
-        for (i, (k, v)) in enumerate(info):
-            text = "{}: {}".format(k, v)
-            cv2.putText(frame, text, (10, H - ((i * 20) + 20)),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
-
-    # show the output frame
-    cv2.imshow("Frame", frame)
-    key = cv2.waitKey(1) & 0xFF
-
-    # if the 's' key is selected, we are going to "select" a bounding
-    # box to track
-    if key == ord("s"):
-        # select the bounding box of the object we want to track (make
-        # sure you press ENTER or SPACE after selecting the ROI)
-        initBB = cv2.selectROI("Frame", frame, fromCenter=False,
-                               showCrosshair=True)
-
-        # start OpenCV object tracker using the supplied bounding box
-        # coordinates, then start the FPS throughput estimator as well
-        tracker.init(frame, initBB)
-        fps = FPS().start()
-
-    # if the `q` key was pressed, break from the loop
-    elif key == ord("q"):
-        break
-
-# if we are using a webcam, release the pointer
-vs.stop()
+import argparse
+from operator import xor
 
 
-# close all windows
-cv2.destroyAllWindows()
+def callback(value):
+    pass
+
+
+def setup_trackbars(range_filter):
+    cv2.namedWindow("Trackbars", 0)
+
+    for i in ["MIN", "MAX"]:
+        v = 0 if i == "MIN" else 255
+
+        for j in range_filter:
+            cv2.createTrackbar("%s_%s" % (j, i), "Trackbars", v, 255, callback)
+
+
+def get_arguments():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('-f', '--filter', required=False, default='HSV',
+                    help='Range filter. RGB or HSV')
+    ap.add_argument('-i', '--image', required=False,
+                    help='Path to the image')
+    ap.add_argument('-w', '--webcam', required=False,
+                    help='Use webcam', action='store_true')
+    ap.add_argument('-p', '--preview', required=False,
+                    help='Show a preview of the image after applying the mask',
+                    action='store_true')
+    args = vars(ap.parse_args())
+
+    if not xor(bool(args['image']), bool(args['webcam'])):
+        ap.error("Please specify only one image source")
+
+    if not args['filter'].upper() in ['RGB', 'HSV']:
+        ap.error("Please speciy a correct filter.")
+
+    return args
+
+
+def get_trackbar_values(range_filter):
+    values = []
+
+    for i in ["MIN", "MAX"]:
+        for j in range_filter:
+            v = cv2.getTrackbarPos("%s_%s" % (j, i), "Trackbars")
+            values.append(v)
+
+    return values
+
+
+def main():
+    args = get_arguments()
+
+    range_filter = args['filter'].upper()
+
+    if args['image']:
+        image = cv2.imread(args['image'])
+
+        if range_filter == 'RGB':
+            frame_to_thresh = image.copy()
+        else:
+            frame_to_thresh = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    else:
+        camera = cv2.VideoCapture(0)
+
+    setup_trackbars(range_filter)
+
+    while True:
+        if args['webcam']:
+            ret, image = camera.read()
+
+            if not ret:
+                break
+
+            if range_filter == 'RGB':
+                frame_to_thresh = image.copy()
+            else:
+                frame_to_thresh = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+        v1_min, v2_min, v3_min, v1_max, v2_max, v3_max = get_trackbar_values(range_filter)
+
+        thresh = cv2.inRange(frame_to_thresh, (v1_min, v2_min, v3_min), (v1_max, v2_max, v3_max))
+
+        if args['preview']:
+            preview = cv2.bitwise_and(image, image, mask=thresh)
+            cv2.imshow("Preview", preview)
+        else:
+            cv2.imshow("Original", image)
+            cv2.imshow("Thresh", thresh)
+
+        if cv2.waitKey(1) & 0xFF is ord('q'):
+            break
+
+
+if __name__ == '__main__':
+    main()

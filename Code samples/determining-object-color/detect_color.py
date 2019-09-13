@@ -10,7 +10,7 @@ import cv2
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True,
+ap.add_argument("-i", "--image", default='test2.jpg',
 	help="path to the input image")
 args = vars(ap.parse_args())
 
