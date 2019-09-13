@@ -66,14 +66,14 @@ while True:
 
     # check to see if we are currently tracking an object
     if initBB is not None:
+        print(initBB)
         # grab the new bounding box coordinates of the object
         (success, box) = tracker.update(frame)
 
         # check to see if the tracking was a success
         if success:
             (x, y, w, h) = [int(v) for v in box]
-            cv2.rectangle(frame, (x, y), (x + w, y + h),
-                          (0, 255, 0), 2)
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
         # update the FPS counter
         fps.update()
@@ -115,7 +115,6 @@ while True:
         break
 
 # if we are using a webcam, release the pointer
-
 vs.stop()
 
 
