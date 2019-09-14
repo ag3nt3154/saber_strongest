@@ -11,13 +11,8 @@ import cv2
 import imutils
 import time
 
-# construct the argument parse and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-v", "--video",
-	help="path to the (optional) video file")
-ap.add_argument("-b", "--buffer", type=int, default=32,
-	help="max buffer size")
-args = vars(ap.parse_args())
+
+contrail_length = 32
 
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space
@@ -26,19 +21,17 @@ greenUpper = (11, 255, 255)
 
 # initialize the list of tracked points, the frame counter,
 # and the coordinate deltas
-pts = deque(maxlen=args["buffer"])
+pts = deque(maxlen=contrail_length)
 counter = 0
 (dX, dY) = (0, 0)
 direction = ""
 
 # if a video path was not supplied, grab the reference
 # to the webcam
-if not args.get("video", False):
-	vs = VideoStream(src=0).start()
 
-# otherwise, grab a reference to the video file
-else:
-	vs = cv2.VideoCapture(args["video"])
+vs = VideoStream(src=0).start()
+
+
 
 # allow the camera or video file to warm up
 time.sleep(2.0)
@@ -48,8 +41,7 @@ while True:
 	# grab the current frame
 	frame = vs.read()
 
-	# handle the frame from VideoCapture or VideoStream
-	frame = frame[1] if args.get("video", False) else frame
+	frame = cv2.flip(frame, 1)
 
 	# if we are viewing a video and we did not grab a frame,
 	# then we have reached the end of the video
@@ -104,35 +96,36 @@ while True:
 
 		# check to see if enough points have been accumulated in
 		# the buffer
-		if counter >= 10 and i == 1 and pts[-10] is not None:
-			# compute the difference between the x and y
-			# coordinates and re-initialize the direction
-			# text variables
-			dX = pts[-10][0] - pts[i][0]
-			dY = pts[-10][1] - pts[i][1]
-			(dirX, dirY) = ("", "")
+		if len(pts) > 9:
+			if counter >= 10 and i == 1 and pts[-10] is not None:
+				# compute the difference between the x and y
+				# coordinates and re-initialize the direction
+				# text variables
+				dX = pts[-10][0] - pts[i][0]
+				dY = pts[-10][1] - pts[i][1]
+				(dirX, dirY) = ("", "")
 
-			# ensure there is significant movement in the
-			# x-direction
-			if np.abs(dX) > 20:
-				dirX = "East" if np.sign(dX) == 1 else "West"
+				# ensure there is significant movement in the
+				# x-direction
+				if np.abs(dX) > 20:
+					dirX = "East" if np.sign(dX) == 1 else "West"
 
-			# ensure there is significant movement in the
-			# y-direction
-			if np.abs(dY) > 20:
-				dirY = "North" if np.sign(dY) == 1 else "South"
+				# ensure there is significant movement in the
+				# y-direction
+				if np.abs(dY) > 20:
+					dirY = "North" if np.sign(dY) == 1 else "South"
 
-			# handle when both directions are non-empty
-			if dirX != "" and dirY != "":
-				direction = "{}-{}".format(dirY, dirX)
+				# handle when both directions are non-empty
+				if dirX != "" and dirY != "":
+					direction = "{}-{}".format(dirY, dirX)
 
-			# otherwise, only one direction is non-empty
-			else:
-				direction = dirX if dirX != "" else dirY
+				# otherwise, only one direction is non-empty
+				else:
+					direction = dirX if dirX != "" else dirY
 
 		# otherwise, compute the thickness of the line and
 		# draw the connecting lines
-		thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
+		thickness = int(np.sqrt(contrail_length / float(i + 1)) * 2.5)
 		cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
 
 	# show the movement deltas and the direction of movement on
