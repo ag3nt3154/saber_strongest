@@ -18,12 +18,12 @@ contrail_length = 32
 # ball in the HSV color space
 
 # Tennis ball
-ctrler1_min = (26, 65, 95)
-ctrler1_max = (141, 158, 165)
+ctrler1_min = (21, 53, 46)
+ctrler1_max = (91, 255, 255)
 
 # Red ball
-ctrler2_min = (0, 160, 84)
-ctrler2_max = (56, 255, 192)
+ctrler2_min = (0, 123, 30)
+ctrler2_max = (164, 255, 255)
 
 
 
