@@ -42,6 +42,7 @@ def main():
 
     camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
+
     setup_trackbars(range_filter)
 
     while True:

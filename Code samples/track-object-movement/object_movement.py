@@ -24,6 +24,7 @@ args = vars(ap.parse_args())
 greenLower = (0, 58, 225)
 greenUpper = (11, 255, 255)
 
+
 # initialize the list of tracked points, the frame counter,
 # and the coordinate deltas
 pts = deque(maxlen=args["buffer"])
