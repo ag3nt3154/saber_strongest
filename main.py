@@ -11,11 +11,28 @@ import pygame, sys
 from pygame.locals import *
 from imutils.video import FPS
 
-# Initialise pygame settings
-# pygame.init()
-# displaysurf = pygame.display.set_mode((0, 0), pygame.FULLSCREEN, pygame.RESIZABLE)
-# pygame.display.set_caption('SABER STRONKEST')
+# Initialise pygame window
+pygame.init()
+displaysurf = pygame.display.set_mode((0, 0), pygame.FULLSCREEN, pygame.RESIZABLE)
+pygame.display.set_caption('SABER STRONKEST')
 
+# Initialise pygame settings
+quit_game = False
+
+# Colour settings
+black = (0, 0, 0)
+white = (255, 255, 255)
+red = (255, 0, 0)
+green = (0, 255, 0)
+blue = (0, 0, 255)
+gray = (100, 100, 100)
+yellow = (255, 255, 0)
+orange = (255, 128, 0)
+purple = (255, 0, 255)
+cyan = (0, 255, 255)
+
+# Text settings
+CourierNewObj = pygame.font.SysFont('couriernew.ttf', 22)
 
 
 # Define the colours of controllers 1 and 2 in terms of min and max colours in HSV colour space.
@@ -52,6 +69,13 @@ fps = FPS().start()
 
 # Main loop through frames from videostream
 while True:
+    # quit_game event
+    if quit_game == True:
+        break
+
+    # Refresh screen for pygame window
+    displaysurf.fill(black)
+    
     # Read the current frame and flip it horizontally to correct orientation
     frame = vs.read()
     frame = cv2.flip(frame, 1)
@@ -205,19 +229,31 @@ while True:
     cv2.putText(frame, "dx: {}, dy: {}".format(dX2, dY2), (310, frame.shape[0] - 10),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
 
-    # Display the frame
+    # Update frame in tracking window
     cv2.imshow("Frame", frame)
+    
+    # Update pygame window
+    pygame.display.update()
+    
     frame_counter += 1
-    
-    key = cv2.waitKey(1) & 0xFF
-    
-    
     fps.update()
     fps.stop()
     
     # if the 'esc' key is pressed, stop the loop
+    key = cv2.waitKey(1) & 0xFF
     if key == 27:
-        break
+        quit_game = True
+
+    # Event loop
+    for event in pygame.event.get():
+        if event.type == KEYDOWN:
+            if event.__dict__['key'] == 27:
+                quit_game = True
+        # Exit if window is closed
+        if event.type == QUIT:
+            quit_game = True
+
+    
 
 # otherwise, release the camera
 vs.stop()
