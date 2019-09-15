@@ -7,14 +7,22 @@ import cv2
 import imutils
 import time
 import calibration
+import pygame, sys
+from pygame.locals import *
+from imutils.video import FPS
+
+# Initialise pygame settings
+# pygame.init()
+# displaysurf = pygame.display.set_mode((0, 0), pygame.FULLSCREEN, pygame.RESIZABLE)
+# pygame.display.set_caption('SABER STRONKEST')
+
+
 
 # Define the colours of controllers 1 and 2 in terms of min and max colours in HSV colour space.
-# Use calibration to determine.
-
+# Use calibration.main to determine.
 # Tennis ball
 ctrler1_min = (21, 53, 46)
 ctrler1_max = (91, 255, 255)
-
 # Red ball
 ctrler2_min = (0, 123, 30)
 ctrler2_max = (164, 255, 255)
@@ -31,12 +39,16 @@ counter = 0
 # direction, ...
 direction1 = 0
 direction2 = 0
+# fps counter
+fps = None
 
 # Initialise videostream from webcam
 vs = VideoStream(src=0).start()
 
 # Pause 2.0s to allow the camera to warm up
 time.sleep(2.0)
+
+fps = FPS().start()
 
 # Main loop through frames from videostream
 while True:
@@ -87,15 +99,14 @@ while True:
             # Update the list of tracked points
             pts1.appendleft(center1)
 
-    # loop over the set of tracked points
+    # Loop over the set of tracked points
     for i in np.arange(1, len(pts1)):
-        # if either of the tracked points are None, ignore
-        # them
+        # If any of the tracked points are None, ignore them
         if pts1[i - 1] is None or pts1[i] is None:
             continue
 
         # check to see if enough points have been accumulated in
-        # the buffer
+        # the contrail
         if len(pts1) > 10:
             if counter >= 10 and i == 1 and pts1[-10] is not None:
                 # compute the difference between the x and y
@@ -201,7 +212,10 @@ while True:
     cv2.imshow("Frame", frame)
     key = cv2.waitKey(1) & 0xFF
     counter += 1
-
+    
+    fps.update()
+    fps.stop()
+    
     # if the 'q' key is pressed, stop the loop
     if key == ord("q"):
         break
