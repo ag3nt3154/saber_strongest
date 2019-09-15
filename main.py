@@ -32,15 +32,14 @@ contrail_length = 32
 pts1 = deque(maxlen=contrail_length)
 pts2 = deque(maxlen=contrail_length)
 # the frame counter, ...
-counter = 0
+frame_counter = 0
 # changes in x, y positions, ...
 (dX1, dY1) = (0, 0)
 (dX2, dY2) = (0, 0)
 # direction, ...
 direction1 = 0
 direction2 = 0
-# fps counter
-fps = None
+
 
 # Initialise videostream from webcam
 vs = VideoStream(src=0).start()
@@ -48,6 +47,7 @@ vs = VideoStream(src=0).start()
 # Pause 2.0s to allow the camera to warm up
 time.sleep(2.0)
 
+# Initialise fps
 fps = FPS().start()
 
 # Main loop through frames from videostream
@@ -104,32 +104,30 @@ while True:
         # If any of the tracked points are None, ignore them
         if pts1[i - 1] is None or pts1[i] is None:
             continue
-
-        # check to see if enough points have been accumulated in
-        # the contrail
+        
+        # Find direction of movement of controller
+        # Check to see if enough points have been accumulated in the contrail
         if len(pts1) > 10:
-            if counter >= 10 and i == 1 and pts1[-10] is not None:
-                # compute the difference between the x and y
-                # coordinates and re-initialize the direction
-                # text variables
+            if frame_counter >= 10 and i == 1 and pts1[-10] is not None:
+                
+                # Find dy, dx
                 dX1 = pts1[-10][0] - pts1[i][0]
                 dY1 = pts1[-10][1] - pts1[i][1]
+                # Initialise direction variables
                 (dirX1, dirY1) = (0, 0)
 
-                # ensure there is significant movement in the
-                # x-direction
+                # If there is significant movement in the x-direction
                 if np.abs(dX1) > 20:
                     dirX1 = -1.5 if np.sign(dX1) == 1 else 1.5
 
-                # ensure there is significant movement in the
-                # y-direction
+                # If there is significant movement in the y-direction
                 if np.abs(dY1) > 20:
                     dirY1 = 1 if np.sign(dY1) == 1 else -1
-
+                
+                # Compute overall direction
                 direction1 = dirX1 + dirY1
 
-        # otherwise, compute the thickness of the line and
-        # draw the connecting lines
+        # Draw the contrail
         thickness = int(np.sqrt(contrail_length / float(i + 1)) * 2.5)
         cv2.line(frame, pts1[i - 1], pts1[i], (0, 0, 255), thickness)
 
@@ -165,59 +163,60 @@ while True:
             # Update the list of tracked points
             pts2.appendleft(center2)
 
-    # loop over the set of tracked points
+    # Loop over the set of tracked points
     for i in np.arange(1, len(pts2)):
-        # if either of the tracked points are None, ignore
-        # them
+        # If any of the tracked points are None, ignore them
         if pts2[i - 1] is None or pts2[i] is None:
             continue
-        # check to see if enough points have been accumulated in
-        # the buffer
+    
+        # Find direction of movement of controller
+        # Check to see if enough points have been accumulated in the contrail
         if len(pts2) > 10:
-            if counter >= 10 and i == 1 and pts2[-10] is not None:
-                # compute the difference between the x and y
-                # coordinates and re-initialize the direction
-                # text variables
+            if frame_counter >= 10 and i == 1 and pts2[-10] is not None:
+            
+                # Find dy, dx
                 dX2 = pts2[-10][0] - pts2[i][0]
                 dY2 = pts2[-10][1] - pts2[i][1]
+                # Initialise direction variables
                 (dirX2, dirY2) = (0, 0)
-
-                # ensure there is significant movement in the
-                # x-direction
+            
+                # If there is significant movement in the x-direction
                 if np.abs(dX2) > 20:
                     dirX2 = -1.5 if np.sign(dX2) == 1 else 1.5
-
-                # ensure there is significant movement in the
-                # y-direction
+            
+                # If there is significant movement in the y-direction
                 if np.abs(dY2) > 20:
                     dirY2 = 1 if np.sign(dY2) == 1 else -1
-
+            
+                # Compute overall direction
                 direction2 = dirX2 + dirY2
-
-        # otherwise, compute the thickness of the line and
-        # draw the connecting lines
+    
+        # Draw the contrail
         thickness = int(np.sqrt(contrail_length / float(i + 1)) * 2.5)
         cv2.line(frame, pts2[i - 1], pts2[i], (0, 0, 255), thickness)
 
-    # show the movement deltas and the direction of movement on
-    # the frame
+    # Show direction of movement
     cv2.putText(frame, str(direction1), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 0, 255), 3)
     cv2.putText(frame, str(direction2), (310, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 0, 255), 3)
+    
+    # Show contrails
     cv2.putText(frame, "dx: {}, dy: {}".format(dX1, dY1), (10, frame.shape[0] - 10),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
     cv2.putText(frame, "dx: {}, dy: {}".format(dX2, dY2), (310, frame.shape[0] - 10),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
 
-    # show the frame to our screen and increment the frame counter
+    # Display the frame
     cv2.imshow("Frame", frame)
+    frame_counter += 1
+    
     key = cv2.waitKey(1) & 0xFF
-    counter += 1
+    
     
     fps.update()
     fps.stop()
     
-    # if the 'q' key is pressed, stop the loop
-    if key == ord("q"):
+    # if the 'esc' key is pressed, stop the loop
+    if key == 27:
         break
 
 # otherwise, release the camera
