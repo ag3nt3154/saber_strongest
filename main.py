@@ -13,7 +13,7 @@ from imutils.video import FPS
 
 # Initialise pygame window
 pygame.init()
-displaysurf = pygame.display.set_mode((0, 0), pygame.FULLSCREEN, pygame.RESIZABLE)
+displaysurf = pygame.display.set_mode((1100, 700), pygame.RESIZABLE)
 pygame.display.set_caption('SABER STRONKEST')
 
 # Initialise pygame settings
@@ -85,7 +85,7 @@ while True:
         break
 
     # Resize the frame, ...
-    frame = imutils.resize(frame, width=600)
+    frame = imutils.resize(frame, width=1000)
     # blur it, ...
     blurred = cv2.GaussianBlur(frame, (11, 11), 0)
     # and convert it to the HSV colour space
@@ -224,13 +224,19 @@ while True:
     cv2.putText(frame, str(direction2), (310, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 0, 255), 3)
     
     # Show contrails
-    cv2.putText(frame, "dx: {}, dy: {}".format(dX1, dY1), (10, frame.shape[0] - 10),
+    cv2.putText(frame, "dx: {}, dy: {}".format(dX1, dY1), (10, frame.shape[0] - 30),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
-    cv2.putText(frame, "dx: {}, dy: {}".format(dX2, dY2), (310, frame.shape[0] - 10),
+    cv2.putText(frame, "dx: {}, dy: {}".format(dX2, dY2), (310, frame.shape[0] - 30),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
 
     # Update frame in tracking window
     cv2.imshow("Frame", frame)
+    
+    if center1 is not None and center2 is not None:
+        # Draw controllers on the pygame window
+        pygame.draw.rect(displaysurf, green, (center1[0], center1[1], 10, 10))
+        pygame.draw.rect(displaysurf, red, (center2[0], center2[1], 10, 10))
+
     
     # Update pygame window
     pygame.display.update()
@@ -253,10 +259,12 @@ while True:
         if event.type == QUIT:
             quit_game = True
 
-    
 
-# otherwise, release the camera
+# Exit procedure after quiting
+# Exit pygame
+pygame.quit()
+# Release the webcam
 vs.stop()
-
-# close all windows
+# Close all windows
 cv2.destroyAllWindows()
+sys.exit()
