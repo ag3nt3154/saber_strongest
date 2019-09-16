@@ -13,11 +13,11 @@ from imutils.video import FPS
 
 # Initialise pygame window
 pygame.init()
-displaysurf = pygame.display.set_mode((1100, 700), pygame.RESIZABLE)
+displaysurf = pygame.display.set_mode((1200, 700), pygame.RESIZABLE)
 
 
 # Initialise pygame settings
-quit_game = False
+status = ""
 
 # Colour settings
 black = (0, 0, 0)
@@ -60,6 +60,17 @@ frame_counter = 0
 direction1 = 0
 direction2 = 0
 
+# Directional values for direction1 and direction2
+# -0.5     1     2.5
+#     \    |    /
+#      \   |   /
+#       \  |  /
+# -1.5-----0-----1.5
+#       /  |  \
+#      /   |   \
+#     /    |    \
+# -2.5    -1      0.5
+
 
 # Initialise videostream from webcam
 vs = VideoStream(src=0).start()
@@ -76,11 +87,12 @@ fps = FPS().start()
 # Main loop through frames from videostream
 while True:
     # quit_game event
-    if quit_game == True:
+    if status == "quit_game":
         break
 
     # Refresh screen for pygame window
     displaysurf.fill(black)
+    pygame.draw.rect(displaysurf, white, (0, 0, 1000, 650), 1)
     
     # Read the current frame and flip it horizontally to correct orientation
     frame = vs.read()
@@ -92,6 +104,7 @@ while True:
 
     # Resize the frame, ...
     frame = imutils.resize(frame, width=1000)
+
     # blur it, ...
     blurred = cv2.GaussianBlur(frame, (11, 11), 0)
     # and convert it to the HSV colour space
@@ -254,16 +267,16 @@ while True:
     # if the 'esc' key is pressed, stop the loop
     key = cv2.waitKey(1) & 0xFF
     if key == 27:
-        quit_game = True
+        status = "quit_game"
 
     # Event loop
     for event in pygame.event.get():
         if event.type == KEYDOWN:
             if event.__dict__['key'] == 27:
-                quit_game = True
+                status = "quit_game"
         # Exit if window is closed
         if event.type == QUIT:
-            quit_game = True
+            status = "quit_game"
 
 
 # Exit procedure after quiting
