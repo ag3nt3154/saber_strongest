@@ -14,7 +14,7 @@ from imutils.video import FPS
 # Initialise pygame window
 pygame.init()
 displaysurf = pygame.display.set_mode((1100, 700), pygame.RESIZABLE)
-pygame.display.set_caption('SABER STRONKEST')
+
 
 # Initialise pygame settings
 quit_game = False
@@ -63,6 +63,9 @@ direction2 = 0
 
 # Initialise videostream from webcam
 vs = VideoStream(src=0).start()
+
+# Display pygame window
+pygame.display.set_caption('SABER STRONKEST')
 
 # Pause 2.0s to allow the camera to warm up
 time.sleep(2.0)

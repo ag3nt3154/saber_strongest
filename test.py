@@ -3,7 +3,7 @@ from pygame.locals import *
 
 # Initialise pygame settings
 pygame.init()
-displaysurf = pygame.display.set_mode((0, 0), pygame.FULLSCREEN, pygame.RESIZABLE)
+displaysurf = pygame.display.set_mode((1000, 600), pygame.RESIZABLE)
 pygame.display.set_caption('SABER STRONKEST')
 
 # Colour setting
@@ -28,6 +28,9 @@ fontObj = pygame.font.SysFont('couriernew.ttf', 22)
 # Quit
 quit_game = False
 
+pygame.mixer.music.load("music/New Divide.mp3")
+pygame.mixer.music.play()
+
 # Main game loop
 while True:
     if quit_game == True:
@@ -45,7 +48,9 @@ while True:
         # Exit if window is closed
         if event.type == QUIT:
             quit_game = True
-
+    
+    t = pygame.mixer.music.get_pos()
+    print(t)
     
 
     pygame.display.update()
