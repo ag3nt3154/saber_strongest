@@ -65,7 +65,7 @@ def main():
         cv2.imshow("Original", image)
         cv2.imshow("Thresh", thresh)
 
-        if cv2.waitKey(1) & 0xFF is ord('q'):
+        if cv2.waitKey(1) & 0xFF is 27:
             break
 
     camera.release()

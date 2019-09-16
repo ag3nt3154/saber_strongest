@@ -37,6 +37,9 @@ CourierNewObj = pygame.font.SysFont('couriernew.ttf', 22)
 
 # Define the colours of controllers 1 and 2 in terms of min and max colours in HSV colour space.
 # Use calibration.main to determine.
+# (ctrler1_min, ctrler1_max) = calibration.main()
+# (ctrler2_min, ctrler2_max) = calibration.main()
+
 # Tennis ball
 ctrler1_min = (21, 53, 46)
 ctrler1_max = (91, 255, 255)
