@@ -61,15 +61,15 @@ direction1 = 0
 direction2 = 0
 
 # Directional values for direction1 and direction2
-# -0.5     1     2.5
-#     \    |    /
-#      \   |   /
-#       \  |  /
-# -1.5-----0-----1.5
-#       /  |  \
-#      /   |   \
-#     /    |    \
-# -2.5    -1      0.5
+#      -0.5     1     2.5
+#          \    |    /
+#           \   |   /
+#            \  |  /
+#      -1.5-----0-----1.5
+#            /  |  \
+#           /   |   \
+#          /    |    \
+#      -2.5    -1      0.5
 
 
 # Initialise videostream from webcam
