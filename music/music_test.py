@@ -18,16 +18,18 @@ new_divide = {
 
     "artist": "Linkin Park",
     "music_path": "music/new_divide.mp3",
-    "file_path": "new_divide.json",
-    "game_play": {
-        500: [[1, 1, 1]],
-        600: [[2, 2, 2.5]],
-        650: [[1, 1, 1], [2, 2, 2.5]],
-        800: [[1, 1, 1], [2, 1, 1], [3, 1, 1]],
-    }
+    "game_play": [
+        [1000, 1, 1, 1],
+        [2000, 2, 2, 2.5],
+        [3500, 1, 1, 1],
+        [3500, 2, 2, 2.5],
+        [4000, 1, 1, 1],
+        [4000, 2, 1, 1],
+        [4000, 3, 1, 1],
+    ]
 
 }
 
 print(new_divide)
 
-misc_fn.dump(new_divide, new_divide["file_path"])
+misc_fn.dump(new_divide, 'new_divide.json')
