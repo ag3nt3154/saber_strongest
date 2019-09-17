@@ -50,10 +50,12 @@ def generate_box(box_data, displaysurf):
         colour = purple
         
     pygame.draw.rect(displaysurf, colour, (x, y, box_size, box_size), 1)
-    return x, y, colour, box_size
+    return x, y, colour, box_size, time.time()
 
 
 def move_box(box, displaysurf):
-    (x, y, colour, box_size) = box
+    (x, y, colour, box_size, start_time) = box
+    time_diff = time.time() - start_time
+    box_size = 20 * (10 / 4) * (time_diff)
     
     pass
