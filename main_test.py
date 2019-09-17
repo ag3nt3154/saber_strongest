@@ -297,7 +297,8 @@ while True:
                 box_counter += 1
                 
         for box in box_list:
-        
+            if time.time() - box[4] < 4:
+                misc_fn.move_box(box, displaysurf)
                 
     
     

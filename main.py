@@ -17,17 +17,20 @@ import os
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 # Update music list to include all available tracks
-mus_path = dir_path + "/music"
+mus_path = dir_path + "/music/"
 music_list_filename = "music_list.json"
 music_list = misc_fn.load(music_list_filename)
 
 # Check for all available tracks
 for filename in os.listdir(mus_path):
-    if filename.endswith(".json") and os.path.splitext(filename)[0] not in music_list:
-        music_list[os.path.splitext(filename)[0]] = "music/" + filename
+    if filename.endswith(".json"):
+        music_list[os.path.splitext(filename)[0]] = misc_fn.load(mus_path + filename)
 
 # Save to music list
 misc_fn.dump(music_list, music_list_filename)
+
+# loaded song
+song_to_load = "new_divide"
 
 # Initialise pygame window
 pygame.init()
@@ -35,6 +38,7 @@ displaysurf = pygame.display.set_mode((1200, 700), pygame.RESIZABLE)
 
 # Initialise pygame settings
 status = ""
+status = "load_song"
 
 # Colour settings
 black = (0, 0, 0)
@@ -271,6 +275,29 @@ while True:
         # Draw controllers on the pygame window
         pygame.draw.rect(displaysurf, green, (center1[0], center1[1], 10, 10))
         pygame.draw.rect(displaysurf, red, (center2[0], center2[1], 10, 10))
+    
+    if status == "load_song":
+        pygame.mixer.music.load(music_list[song_to_load]["music_path"])
+        pygame.mixer.music.play()
+        status = "playing"
+        box_counter = 0
+    
+    if status == "playing":
+        song_timer = pygame.mixer.music.get_pos()
+        game_play = music_list[song_to_load]["game_play"]
+        box_list = []
+        for i in range(len(game_play)):
+            if box_counter > len(game_play) - 1:
+                break
+            if song_timer < game_play[box_counter][0]:
+                break
+            else:
+                box_list.append(misc_fn.generate_box(box_data=game_play[box_counter], displaysurf=displaysurf))
+                box_counter += 1
+        
+        for box in box_list:
+            if time.time() - box[4] < 4:
+                misc_fn.move_box(box, displaysurf)
     
     # Update pygame window
     pygame.display.update()
