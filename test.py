@@ -1,5 +1,27 @@
 import pygame, sys
 from pygame.locals import *
+import os
+import misc_fn
+from box import Box, Box1
+
+# Path of directory
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
+# Update music list to include all available tracks
+mus_path = dir_path + "/music/"
+music_list_filename = "music_list.json"
+music_list = misc_fn.load(music_list_filename)
+
+# Check for all available tracks
+for filename in os.listdir(mus_path):
+    if filename.endswith(".json"):
+        music_list[os.path.splitext(filename)[0]] = misc_fn.load(mus_path + filename)
+
+# Save to music list
+misc_fn.dump(music_list, music_list_filename)
+
+# loaded song
+song_to_load = "new_divide"
 
 # Initialise pygame settings
 pygame.init()
@@ -28,17 +50,41 @@ fontObj = pygame.font.SysFont('couriernew.ttf', 22)
 # Quit
 quit_game = False
 
-pygame.mixer.music.load("music/New Divide.mp3")
-pygame.mixer.music.play()
+status = "load_song"
+
 
 # Main game loop
 while True:
-    if quit_game == True:
+    if quit_game:
         break
     # Refresh screen
     displaysurf.fill(black)
 
-    
+    if status == "load_song":
+        pygame.mixer.music.load(music_list[song_to_load]["music_path"])
+        pygame.mixer.music.play()
+        status = "playing"
+        box_counter = 0
+        box_list = pygame.sprite.Group()
+
+    if status == "playing":
+        song_timer = pygame.mixer.music.get_pos()
+        game_play = music_list[song_to_load]["game_play"]
+        for i in range(len(game_play)):
+            if box_counter > len(game_play) - 1:
+                break
+            elif song_timer < game_play[box_counter][0]:
+                break
+            else:
+                box = Box1(game_play[box_counter])
+                box_list.add(box)
+                box_counter += 1
+        # for box in box_list:
+        #     box.move(song_timer)
+        
+        box_list.update(song_timer)
+        box_list.draw(displaysurf)
+        
 
     # Event loop
     for event in pygame.event.get():
@@ -49,8 +95,7 @@ while True:
         if event.type == QUIT:
             quit_game = True
     
-    t = pygame.mixer.music.get_pos()
-    print(t)
+
     
 
     pygame.display.update()
