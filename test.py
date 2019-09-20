@@ -2,7 +2,7 @@ import pygame, sys
 from pygame.locals import *
 import os
 import misc_fn
-from box import Box, Box1
+from box import Box1
 
 # Path of directory
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -68,6 +68,25 @@ while True:
         box_list = pygame.sprite.Group()
 
     if status == "playing":
+        # Set center of screen as (500, 250)
+        pygame.draw.line(displaysurf, white, (0, 500), (500, 250))
+        pygame.draw.line(displaysurf, white, (1000, 500), (500, 250))
+        
+        pygame.draw.line(displaysurf, white, (500, 250), (460, 280))
+        pygame.draw.line(displaysurf, white, (500, 250), (480, 280))
+        pygame.draw.line(displaysurf, white, (500, 250), (500, 280))
+        pygame.draw.line(displaysurf, white, (500, 250), (520, 280))
+        
+        pygame.draw.line(displaysurf, white, (500, 250), (460, 300))
+        pygame.draw.line(displaysurf, white, (500, 250), (480, 300))
+        pygame.draw.line(displaysurf, white, (500, 250), (500, 300))
+        pygame.draw.line(displaysurf, white, (500, 250), (520, 300))
+        
+        pygame.draw.line(displaysurf, white, (500, 250), (460, 320))
+        pygame.draw.line(displaysurf, white, (500, 250), (480, 320))
+        pygame.draw.line(displaysurf, white, (500, 250), (500, 320))
+        pygame.draw.line(displaysurf, white, (500, 250), (520, 320))
+        
         song_timer = pygame.mixer.music.get_pos()
         game_play = music_list[song_to_load]["game_play"]
         for i in range(len(game_play)):
@@ -79,11 +98,11 @@ while True:
                 box = Box1(game_play[box_counter])
                 box_list.add(box)
                 box_counter += 1
-        # for box in box_list:
-        #     box.move(song_timer)
+
         
         box_list.update(song_timer)
         box_list.draw(displaysurf)
+        
         
 
     # Event loop

@@ -61,11 +61,11 @@ CourierNewObj = pygame.font.SysFont('couriernew.ttf', 22)
 # (ctrler2_min, ctrler2_max) = calibration.main()
 
 # Tennis ball
-ctrler1_min = (21, 53, 46)
-ctrler1_max = (91, 255, 255)
+ctrler1_min = (18, 39, 81)
+ctrler1_max = (35, 130, 250)
 # Red ball
-ctrler2_min = (0, 123, 30)
-ctrler2_max = (164, 255, 255)
+ctrler2_min = (0, 113, 53)
+ctrler2_max = (241, 186, 244)
 
 # Initialize the list of tracked points, ...
 contrail_length = 32
@@ -276,28 +276,7 @@ while True:
         pygame.draw.rect(displaysurf, green, (center1[0], center1[1], 10, 10))
         pygame.draw.rect(displaysurf, red, (center2[0], center2[1], 10, 10))
     
-    if status == "load_song":
-        pygame.mixer.music.load(music_list[song_to_load]["music_path"])
-        pygame.mixer.music.play()
-        status = "playing"
-        box_counter = 0
     
-    if status == "playing":
-        song_timer = pygame.mixer.music.get_pos()
-        game_play = music_list[song_to_load]["game_play"]
-        box_list = []
-        for i in range(len(game_play)):
-            if box_counter > len(game_play) - 1:
-                break
-            if song_timer < game_play[box_counter][0]:
-                break
-            else:
-                box_list.append(misc_fn.generate_box(box_data=game_play[box_counter], displaysurf=displaysurf))
-                box_counter += 1
-        
-        for box in box_list:
-            if time.time() - box[4] < 4:
-                misc_fn.move_box(box, displaysurf)
     
     # Update pygame window
     pygame.display.update()
