@@ -69,23 +69,23 @@ while True:
 
     if status == "playing":
         # Set center of screen as (500, 250)
-        pygame.draw.line(displaysurf, white, (0, 500), (500, 250))
-        pygame.draw.line(displaysurf, white, (1000, 500), (500, 250))
+        pygame.draw.line(displaysurf, white, (0, 470), (500, 250), 3)
+        pygame.draw.line(displaysurf, white, (1000, 470), (500, 250), 3)
         
-        pygame.draw.line(displaysurf, white, (500, 250), (460, 280))
-        pygame.draw.line(displaysurf, white, (500, 250), (480, 280))
-        pygame.draw.line(displaysurf, white, (500, 250), (500, 280))
-        pygame.draw.line(displaysurf, white, (500, 250), (520, 280))
+        pygame.draw.line(displaysurf, red, (500, 250), (0, 125))
+        pygame.draw.line(displaysurf, red, (500, 250), (0, 0))
+        pygame.draw.line(displaysurf, red, (500, 250), (500, 0))
+        pygame.draw.line(displaysurf, red, (500, 250), (1000, 0))
         
-        pygame.draw.line(displaysurf, white, (500, 250), (460, 300))
-        pygame.draw.line(displaysurf, white, (500, 250), (480, 300))
-        pygame.draw.line(displaysurf, white, (500, 250), (500, 300))
-        pygame.draw.line(displaysurf, white, (500, 250), (520, 300))
+        pygame.draw.line(displaysurf, blue, (500, 250), (0, 375))
+        pygame.draw.line(displaysurf, blue, (500, 250), (0, 500))
+        pygame.draw.line(displaysurf, blue, (500, 250), (500, 1000))
+        pygame.draw.line(displaysurf, blue, (500, 250), (1000, 500))
         
-        pygame.draw.line(displaysurf, white, (500, 250), (460, 320))
-        pygame.draw.line(displaysurf, white, (500, 250), (480, 320))
-        pygame.draw.line(displaysurf, white, (500, 250), (500, 320))
-        pygame.draw.line(displaysurf, white, (500, 250), (520, 320))
+        pygame.draw.line(displaysurf, green, (500, 250), (0, 625))
+        pygame.draw.line(displaysurf, green, (500, 250), (0, 1000))
+        pygame.draw.line(displaysurf, green, (500, 250), (500, 1000))
+        pygame.draw.line(displaysurf, green, (500, 250), (1000, 1000))
         
         song_timer = pygame.mixer.music.get_pos()
         game_play = music_list[song_to_load]["game_play"]

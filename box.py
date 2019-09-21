@@ -18,7 +18,7 @@ cyan = (0, 255, 255)
 class Box1(pygame.sprite.Sprite):
     def __init__(self, box_data):
         super().__init__()
-        self.size = 10
+        self.size = 20
         self.start_time, self.position, self.type, self.direction = box_data
         if self.type == 1:
             self.image = pygame.image.load("box1.jpg").convert_alpha()
@@ -35,23 +35,23 @@ class Box1(pygame.sprite.Sprite):
         time_diff = (current_time - self.start_time)
         passage_time = 2E3
         dsize = int(self.size + (100/passage_time) * time_diff)
-        
+
         if misc_fn.col(self.position) == 0:
-            self.rect.x = 460 - (360/passage_time * time_diff)
+            self.rect.x = 460 - (960/passage_time * time_diff)
         elif misc_fn.col(self.position) == 1:
-            self.rect.x = 480 - (180/passage_time * time_diff)
+            self.rect.x = 480 - (480/passage_time * time_diff)
         elif misc_fn.col(self.position) == 2:
             self.rect.x = 500
         elif misc_fn.col(self.position) == 3:
-            self.rect.x = 520 + (180/passage_time * time_diff)
+            self.rect.x = 520 + (480/passage_time * time_diff)
 
         if misc_fn.row(self.position) == 0:
-            self.rect.y = 280 - (280/passage_time) * time_diff
+            self.rect.y = 240 - (240/passage_time) * time_diff
         elif misc_fn.row(self.position) == 1:
-            self.rect.y = 300 - (100/passage_time) * time_diff
+            self.rect.y = 260 + (240/passage_time) * time_diff
         elif misc_fn.row(self.position) == 2:
-            self.rect.y = 320 + (80/passage_time) * time_diff
-            
+            self.rect.y = 280 + (720/passage_time) * time_diff
+
         self.image = pygame.transform.smoothscale(self.orig_image, (dsize, dsize))
         if time_diff >= passage_time:
             self.kill()
