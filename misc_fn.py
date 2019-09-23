@@ -37,7 +37,7 @@ def row(position):
 
 def start_xy(position, box_size=20):
     x = col(position) * box_size + 460
-    y = row(position) * box_size + 240
+    y = row(position) * box_size + 58
     return x, y
 
 

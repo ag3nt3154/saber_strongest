@@ -277,33 +277,7 @@ while True:
         pygame.draw.rect(displaysurf, green, (center1[0], center1[1], 10, 10))
         pygame.draw.rect(displaysurf, red, (center2[0], center2[1], 10, 10))
         
-    if status == "load_song":
-        pygame.mixer.music.load(music_list[song_to_load]["music_path"])
-        pygame.mixer.music.play()
-        status = "playing"
-        box_counter = 0
-        box_list = []
-        
-    if status == "playing":
-        song_timer = pygame.mixer.music.get_pos()
-        game_play = music_list[song_to_load]["game_play"]
-        for i in range(len(game_play)):
-            if box_counter > len(game_play) - 1:
-                break
-            if song_timer < game_play[box_counter][0]:
-                    break
-            else:
-                box_list.append(misc_fn.generate_box(box_data=game_play[box_counter], displaysurf=displaysurf,
-                                                     start_time=song_timer))
-                box_counter += 1
-        print(box_list)
-        for box in box_list:
-            print(box[5][0])
-            print(song_timer)
-            print("-----")
-            if song_timer - box[5][0] < 4000:
-                print(song_timer - box[5][0])
-                box = misc_fn.move_box(box=box, displaysurf=displaysurf, current_time=song_timer)
+
                 
     
     

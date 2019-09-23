@@ -25,7 +25,7 @@ song_to_load = "new_divide"
 
 # Initialise pygame settings
 pygame.init()
-displaysurf = pygame.display.set_mode((1000, 600), pygame.RESIZABLE)
+displaysurf = pygame.display.set_mode((1200, 630), pygame.RESIZABLE)
 pygame.display.set_caption('SABER STRONKEST')
 
 # Colour setting
@@ -59,33 +59,80 @@ while True:
         break
     # Refresh screen
     displaysurf.fill(black)
-
+    pygame.draw.rect(displaysurf, white, (0, 0, 1000, 600), 1)
     if status == "load_song":
         pygame.mixer.music.load(music_list[song_to_load]["music_path"])
         pygame.mixer.music.play()
         status = "playing"
         box_counter = 0
-        box_list = pygame.sprite.Group()
+        # box_list = pygame.sprite.Group()
+        box_list = pygame.sprite.LayeredUpdates()
 
     if status == "playing":
         # Set center of screen as (500, 250)
-        pygame.draw.line(displaysurf, white, (0, 470), (500, 250), 3)
-        pygame.draw.line(displaysurf, white, (1000, 470), (500, 250), 3)
+        # pygame.draw.line(displaysurf, white, (0, 400), (500, 150), 3)
+        # pygame.draw.line(displaysurf, white, (1000, 400), (500, 150), 3)
+
+        pygame.draw.line(displaysurf, white, (0, 100), (500, 45), 1)
+        pygame.draw.line(displaysurf, white, (1000, 100), (500, 45), 1)
         
-        pygame.draw.line(displaysurf, red, (500, 250), (0, 125))
-        pygame.draw.line(displaysurf, red, (500, 250), (0, 0))
-        pygame.draw.line(displaysurf, red, (500, 250), (500, 0))
-        pygame.draw.line(displaysurf, red, (500, 250), (1000, 0))
         
-        pygame.draw.line(displaysurf, blue, (500, 250), (0, 375))
-        pygame.draw.line(displaysurf, blue, (500, 250), (0, 500))
-        pygame.draw.line(displaysurf, blue, (500, 250), (500, 1000))
-        pygame.draw.line(displaysurf, blue, (500, 250), (1000, 500))
+        # grid 1
+        n1 = 4 - 200
+        pygame.draw.line(displaysurf, white, (460, 250 + n1), (540, 250 + n1), 2)
+        pygame.draw.line(displaysurf, white, (460, 270 + n1), (540, 270 + n1), 2)
+        pygame.draw.line(displaysurf, white, (460, 290 + n1), (540, 290 + n1), 2)
+        pygame.draw.line(displaysurf, white, (460, 310 + n1), (540, 310 + n1), 2)
+
+        pygame.draw.line(displaysurf, white, (460, 250 + n1), (460, 310 + n1), 2)
+        pygame.draw.line(displaysurf, white, (540, 250 + n1), (540, 310 + n1), 2)
+        pygame.draw.line(displaysurf, white, (500, 250 + n1), (500, 310 + n1), 2)
+        pygame.draw.line(displaysurf, white, (520, 250 + n1), (520, 310 + n1), 2)
+        pygame.draw.line(displaysurf, white, (480, 250 + n1), (480, 310 + n1), 2)
+
+
+        # grid 2
+        n2 = 10 - 200
+        pygame.draw.line(displaysurf, red, (400, 250 + n2), (600, 250 + n2), 2)
+        pygame.draw.line(displaysurf, red, (400, 300 + n2), (600, 300 + n2), 2)
+        pygame.draw.line(displaysurf, red, (400, 350 + n2), (600, 350 + n2), 2)
+        pygame.draw.line(displaysurf, red, (400, 400 + n2), (600, 400 + n2), 2)
+
+        pygame.draw.line(displaysurf, red, (400, 250 + n2), (400, 400 + n2), 2)
+        pygame.draw.line(displaysurf, red, (450, 250 + n2), (450, 400 + n2), 2)
+        pygame.draw.line(displaysurf, red, (500, 250 + n2), (500, 400 + n2), 2)
+        pygame.draw.line(displaysurf, red, (550, 250 + n2), (550, 400 + n2), 2)
+        pygame.draw.line(displaysurf, red, (600, 250 + n2), (600, 400 + n2), 2)
+
         
-        pygame.draw.line(displaysurf, green, (500, 250), (0, 625))
-        pygame.draw.line(displaysurf, green, (500, 250), (0, 1000))
-        pygame.draw.line(displaysurf, green, (500, 250), (500, 1000))
-        pygame.draw.line(displaysurf, green, (500, 250), (1000, 1000))
+        # grid 3
+        n3 = 20 - 200
+        pygame.draw.line(displaysurf, blue, (300, 250 + n3), (700, 250 + n3), 2)
+        pygame.draw.line(displaysurf, blue, (300, 350 + n3), (700, 350 + n3), 2)
+        pygame.draw.line(displaysurf, blue, (300, 450 + n3), (700, 450 + n3), 2)
+        pygame.draw.line(displaysurf, blue, (300, 550 + n3), (700, 550 + n3), 2)
+        
+        pygame.draw.line(displaysurf, blue, (300, 250 + n3), (300, 550 + n3), 2)
+        pygame.draw.line(displaysurf, blue, (400, 250 + n3), (400, 550 + n3), 2)
+        pygame.draw.line(displaysurf, blue, (500, 250 + n3), (500, 550 + n3), 2)
+        pygame.draw.line(displaysurf, blue, (600, 250 + n3), (600, 550 + n3), 2)
+        pygame.draw.line(displaysurf, blue, (700, 250 + n3), (700, 550 + n3), 2)
+
+
+        # grid 4
+        n4 = 30 - 200
+        pygame.draw.line(displaysurf, green, (200, 250 + n4), (800, 250 + n4), 2)
+        pygame.draw.line(displaysurf, green, (200, 400 + n4), (800, 400 + n4), 2)
+        pygame.draw.line(displaysurf, green, (200, 550 + n4), (800, 550 + n4), 2)
+        pygame.draw.line(displaysurf, green, (200, 700 + n4), (800, 700 + n4), 2)
+        
+        pygame.draw.line(displaysurf, green, (200, 250 + n4), (200, 700 + n4), 2)
+        pygame.draw.line(displaysurf, green, (350, 250 + n4), (350, 700 + n4), 2)
+        pygame.draw.line(displaysurf, green, (500, 250 + n4), (500, 700 + n4), 2)
+        pygame.draw.line(displaysurf, green, (650, 250 + n4), (650, 700 + n4), 2)
+        pygame.draw.line(displaysurf, green, (800, 250 + n4), (800, 700 + n4), 2)
+
+
         
         song_timer = pygame.mixer.music.get_pos()
         game_play = music_list[song_to_load]["game_play"]
@@ -96,7 +143,8 @@ while True:
                 break
             else:
                 box = Box1(game_play[box_counter])
-                box_list.add(box)
+                box_list.add(box, layer=(len(game_play) - box_counter))
+                
                 box_counter += 1
 
         
