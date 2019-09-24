@@ -8,6 +8,7 @@ import json
 import pygame
 import numpy as np
 import time
+import os
 
 
 def dump(data, filename):
@@ -39,6 +40,34 @@ def start_xy(position, box_size=20):
     x = col(position) * box_size + 460
     y = row(position) * box_size + 58
     return x, y
+
+
+_image_library = {}
+
+
+def get_image(path):
+    # Usage: screen.blit(get_image('ball.png'), (20, 20))
+    global _image_library
+    image = _image_library.get(path)
+    if image is None:
+        canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
+        image = pygame.image.load(canonicalized_path).convert_alpha()
+        _image_library[path] = image
+    return image
+
+
+_sound_library = {}
+
+
+def play_sound(path):
+    # Usage: play_sound(path)
+    global _sound_library
+    sound = _sound_library.get(path)
+    if sound is None:
+        canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
+        sound = pygame.mixer.Sound(canonicalized_path)
+        _sound_library[path] = sound
+    sound.play()
 
 
 if __name__ == '__main__':

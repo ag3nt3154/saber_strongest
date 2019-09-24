@@ -70,11 +70,11 @@ while True:
 
     if status == "playing":
         # Set center of screen as (500, 250)
-        # pygame.draw.line(displaysurf, white, (0, 400), (500, 150), 3)
-        # pygame.draw.line(displaysurf, white, (1000, 400), (500, 150), 3)
+        pygame.draw.line(displaysurf, white, (0, 600), (450, 150), 3)
+        pygame.draw.line(displaysurf, white, (1000, 600), (550, 150), 3)
 
-        pygame.draw.line(displaysurf, white, (0, 100), (500, 45), 1)
-        pygame.draw.line(displaysurf, white, (1000, 100), (500, 45), 1)
+        # pygame.draw.line(displaysurf, white, (0, 100), (500, 45), 1)
+        # pygame.draw.line(displaysurf, white, (1000, 100), (500, 45), 1)
         
         
         # grid 1
@@ -135,6 +135,12 @@ while True:
 
         
         song_timer = pygame.mixer.music.get_pos()
+
+        SongText = fontObj.render('Time: {}'.format(song_timer/1E3), True, white)
+        SongTextRect = SongText.get_rect()
+        SongTextRect.topleft = (630, 10)
+        displaysurf.blit(SongText, SongTextRect)
+        
         game_play = music_list[song_to_load]["game_play"]
         for i in range(len(game_play)):
             if box_counter > len(game_play) - 1:
