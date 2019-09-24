@@ -2,6 +2,9 @@ import pygame
 import misc_fn
 import numpy as np
 import time
+import os
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 # pygame.mixer.pre_init(44100, 16, 2, 4096) #frequency, size, channels, buffersize
 pygame.mixer.init() #turn all of pygame on.
@@ -25,9 +28,9 @@ class Box1(pygame.sprite.Sprite):
         self.size = 20
         self.start_time, self.position, self.type, self.direction = box_data
         if self.type == 1:
-            self.image = pygame.image.load("box1.jpg").convert_alpha()
+            self.image = pygame.image.load("VFX/box1.jpg").convert_alpha()
         elif self.type == 2:
-            self.image = pygame.image.load("box2.jpg").convert_alpha()
+            self.image = pygame.image.load("VFX/box2.jpg").convert_alpha()
         
         # Store a reference to the original to preserve the image quality.
         self.orig_image = self.image
@@ -64,7 +67,7 @@ class Box1(pygame.sprite.Sprite):
         self.image = pygame.transform.smoothscale(self.orig_image, (dsize, dsize))
         
         if time_diff >= 1E3:
-            pygame.mixer.Sound("C:\\Users\\alexr\\saber_strongest\\beat.wav").play()
+            pygame.mixer.Sound(os.path.join(dir_path, "SFX/beat.wav")).play()
             self.kill()
         if time_diff >= passage_time:
             self.kill()
@@ -76,9 +79,9 @@ class Box2(pygame.sprite.Sprite):
         self.size = 20
         self.start_time, self.position, self.type, self.direction = box_data
         if self.type == 1:
-            self.image = pygame.image.load("box1.jpg").convert_alpha()
+            self.image = pygame.image.load("VFX/box1.jpg").convert_alpha()
         elif self.type == 2:
-            self.image = pygame.image.load("box2.jpg").convert_alpha()
+            self.image = pygame.image.load("VFX/box2.jpg").convert_alpha()
 
         # Store a reference to the original to preserve the image quality.
         self.orig_image = self.image
@@ -113,7 +116,7 @@ class Box2(pygame.sprite.Sprite):
         self.image = pygame.transform.smoothscale(self.orig_image, (dsize, dsize))
 
         if time_diff >= 0.9E3:
-            pygame.mixer.Sound("C:\\Users\\alexr\\saber_strongest\\beat1.wav").play()
+            pygame.mixer.Sound(os.path.join(dir_path, "SFX/beat1.wav")).play()
     
             self.kill()
         if time_diff >= passage_time:
