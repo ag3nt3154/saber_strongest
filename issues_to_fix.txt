@@ -1,5 +1,7 @@
-- Low framerate
+- low framerate
 - unstable framerate
 - boxes look ugly
 - the direction of boxes is weird
 - the sound is weird
+- add different boxes for directions
+- add different boxes for controllers
