@@ -12,6 +12,7 @@ from pygame.locals import *
 from imutils.video import FPS
 import misc_fn
 import os
+from box import Box1, Box2
 
 # Path of directory
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -61,14 +62,14 @@ CourierNewObj = pygame.font.SysFont('couriernew.ttf', 22)
 # (ctrler2_min, ctrler2_max) = calibration.main()
 
 # Tennis ball
-ctrler1_min = (18, 39, 81)
-ctrler1_max = (35, 130, 250)
+ctrler1_min = (21, 53, 46)
+ctrler1_max = (91, 255, 255)
 # Red ball
-ctrler2_min = (0, 113, 53)
-ctrler2_max = (241, 186, 244)
+ctrler2_min = (0, 123, 30)
+ctrler2_max = (164, 255, 255)
 
 # Initialize the list of tracked points, ...
-contrail_length = 32
+contrail_length = 15
 pts1 = deque(maxlen=contrail_length)
 pts2 = deque(maxlen=contrail_length)
 # the frame counter, ...
@@ -97,6 +98,8 @@ vs = VideoStream(src=0).start()
 
 # Display pygame window
 pygame.display.set_caption('SABER STRONKEST')
+# Text
+fontObj = pygame.font.SysFont('couriernew.ttf', 22)
 
 # Pause 2.0s to allow the camera to warm up
 time.sleep(2.0)
@@ -276,7 +279,36 @@ while True:
         pygame.draw.rect(displaysurf, green, (center1[0], center1[1], 10, 10))
         pygame.draw.rect(displaysurf, red, (center2[0], center2[1], 10, 10))
     
+    # Game window
+    if status == "load_song":
+        pygame.mixer.music.load(music_list[song_to_load]["music_path"])
+        pygame.mixer.music.play()
+        status = "playing"
+        box_counter = 0
+        box_list = pygame.sprite.LayeredUpdates()
     
+    if status == "playing":
+        
+        song_timer = pygame.mixer.music.get_pos()
+        
+        SongText = fontObj.render('Time: {}'.format(song_timer / 1E3), True, white)
+        SongTextRect = SongText.get_rect()
+        SongTextRect.topleft = (630, 10)
+        displaysurf.blit(SongText, SongTextRect)
+        
+        game_play = music_list[song_to_load]["game_play"]
+        for i in range(len(game_play)):
+            if box_counter > len(game_play) - 1:
+                break
+            elif song_timer < game_play[box_counter][0]:
+                break
+            else:
+                box = Box2(game_play[box_counter])
+                box_list.add(box, layer=(len(game_play) - box_counter))
+                box_counter += 1
+        if len(box_list) > 0:
+            box_list.update(song_timer, center1)
+            box_list.draw(displaysurf)
     
     # Update pygame window
     pygame.display.update()
@@ -284,6 +316,7 @@ while True:
     frame_counter += 1
     fps.update()
     fps.stop()
+    print(fps.fps())
     
     # if the 'esc' key is pressed, stop the loop
     key = cv2.waitKey(1) & 0xFF

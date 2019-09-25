@@ -89,7 +89,7 @@ class Box2(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = misc_fn.start_xy(self.position, self.size)
 
-    def update(self, current_time):
+    def update(self, current_time, center):
         time_diff = (current_time - self.start_time)
         passage_time = 1.2E3
 
@@ -115,12 +115,13 @@ class Box2(pygame.sprite.Sprite):
 
         self.image = pygame.transform.smoothscale(self.orig_image, (dsize, dsize))
 
-        if time_diff >= 0.9E3:
-            pygame.mixer.Sound(os.path.join(dir_path, "SFX/beat1.wav")).play()
-    
-            self.kill()
-        if time_diff >= passage_time:
-            self.kill()
+        if time_diff >= 0.5E3:
+            if self.rect.x < center[0] < self.rect.x + self.image.get_width() \
+                    and self.rect.y < center[1] < self.rect.y + self.image.get_height():
+                pygame.mixer.Sound(os.path.join(dir_path, "SFX/beat1.wav")).play()
+                self.kill()
+            # if time_diff >= passage_time:
+            #     self.kill()
 
         
     
