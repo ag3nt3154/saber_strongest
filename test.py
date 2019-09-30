@@ -3,6 +3,7 @@ from pygame.locals import *
 import os
 import misc_fn
 from box import Box1
+from imutils.video import FPS
 
 # Path of directory
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -41,7 +42,7 @@ purple = (255, 0, 255)
 cyan = (0, 255, 255)
 
 # FPS setting
-FPS = 10
+
 fpsClock = pygame.time.Clock()
 
 # Text
@@ -52,9 +53,11 @@ quit_game = False
 
 status = "load_song"
 
+fps = FPS().start()
 
 # Main game loop
 while True:
+
     if quit_game:
         break
     # Refresh screen
@@ -169,7 +172,9 @@ while True:
             quit_game = True
     
 
-    
+    fps.update()
+    fps.stop()
+    print(fps.fps())
 
     pygame.display.update()
     # fpsClock.tick(FPS)
