@@ -21,9 +21,6 @@ def setup_trackbars(range_filter):
             cv2.createTrackbar("%s_%s" % (j, i), "Trackbars", v, 255, callback)
 
 
-
-
-
 def get_trackbar_values(range_filter):
 # Get HSV values from trackbars
     values = []
@@ -71,6 +68,7 @@ def main():
     camera.release()
     cv2.destroyAllWindows()
     return ((v1_min, v2_min, v3_min), (v1_max, v2_max, v3_max))
+
 
 if __name__ == '__main__':
     main()

@@ -1,9 +1,10 @@
 import pygame, sys
 from pygame.locals import *
 import os
+from imutils.video import FPS
+
 import misc_fn
 from box import Box1
-from imutils.video import FPS
 
 # Path of directory
 dir_path = os.path.dirname(os.path.realpath(__file__))
