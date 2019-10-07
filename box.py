@@ -27,10 +27,8 @@ class Box1(pygame.sprite.Sprite):
         super().__init__()
         self.size = 20
         self.start_time, self.position, self.type, self.direction = box_data
-        if self.type == 1:
-            self.image = pygame.image.load("VFX/box1.jpg").convert_alpha()
-        elif self.type == 2:
-            self.image = pygame.image.load("VFX/box2.jpg").convert_alpha()
+        img_path = "VFX/box-" + str(self.type) + self.direction + ".jpg"
+        self.image = pygame.image.load(img_path).convert_alpha()
         
         # Store a reference to the original to preserve the image quality.
         self.orig_image = self.image
@@ -78,10 +76,13 @@ class Box2(pygame.sprite.Sprite):
         super().__init__()
         self.size = 20
         self.start_time, self.position, self.type, self.direction = box_data
-        if self.type == 1:
-            self.image = pygame.image.load("VFX/box1.jpg").convert_alpha()
-        elif self.type == 2:
-            self.image = pygame.image.load("VFX/box2.jpg").convert_alpha()
+        img_path = "VFX/box-" + str(self.type) + self.direction + ".jpg"
+        self.image = pygame.image.load(img_path).convert_alpha()
+        # if self.type == 1:
+        #     if self.direction == "N":
+        #         self.image = pygame.image.load("VFX/box-1E.png").convert_alpha()
+        # elif self.type == 2:
+        #     self.image = pygame.image.load("VFX/box2.jpg").convert_alpha()
 
         # Store a reference to the original to preserve the image quality.
         self.orig_image = self.image

@@ -71,7 +71,26 @@ def tracking(frame, ctrler1_min, ctrler1_max, ctrler2_min, ctrler2_max,
                     dirY1 = 1 if np.sign(dY1) == 1 else -1
                 
                 # Compute overall direction
-                direction1 = dirX1 + dirY1
+                if dirX1 + dirY1 == 1:
+                    direction1 = "N"
+                elif dirX1 + dirY1 == 2.5:
+                    direction1 = "NE"
+                elif dirX1 + dirY1 == 1.5:
+                    direction1 = "E"
+                elif dirX1 + dirY1 == 0.5:
+                    direction1 = "SE"
+                elif dirX1 + dirY1 == -1:
+                    direction1 = "S"
+                elif dirX1 + dirY1 == -2.5:
+                    direction1 = "SW"
+                elif dirX1 + dirY1 == -1.5:
+                    direction1 = "W"
+                elif dirX1 + dirY1 == -0.5:
+                    direction1 = "NW"
+                else:
+                    direction1 = "C"
+                
+                
         
         # Draw the contrail
         thickness = int(np.sqrt(contrail_length / float(i + 1)) * 2.5)
@@ -135,7 +154,25 @@ def tracking(frame, ctrler1_min, ctrler1_max, ctrler2_min, ctrler2_max,
                     dirY2 = 1 if np.sign(dY2) == 1 else -1
                 
                 # Compute overall direction
-                direction2 = dirX2 + dirY2
+                    # Compute overall direction
+                    if dirX2 + dirY2 == 1:
+                        direction2 = "N"
+                    elif dirX2 + dirY2 == 2.5:
+                        direction2 = "NE"
+                    elif dirX2 + dirY2 == 1.5:
+                        direction2 = "E"
+                    elif dirX2 + dirY2 == 0.5:
+                        direction2 = "SE"
+                    elif dirX2 + dirY2 == -1:
+                        direction2 = "S"
+                    elif dirX2 + dirY2 == -2.5:
+                        direction2 = "SW"
+                    elif dirX2 + dirY2 == -1.5:
+                        direction2 = "W"
+                    elif dirX2 + dirY2 == -0.5:
+                        direction2 = "NW"
+                    else:
+                        direction2 = "C"
         
         # Draw the contrail
         thickness = int(np.sqrt(contrail_length / float(i + 1)) * 2.5)
