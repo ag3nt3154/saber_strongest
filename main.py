@@ -1,17 +1,17 @@
 # USAGE
-
+import os
 from collections import deque
 from imutils.video import VideoStream
 import numpy as np
 import cv2
 import imutils
 import time
-import calibration
 import pygame, sys
 from pygame.locals import *
 from imutils.video import FPS
+
+import calibration
 import misc_fn
-import os
 from box import Box1, Box2
 
 # Path of directory

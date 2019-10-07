@@ -1,8 +1,9 @@
 import pygame
-import misc_fn
 import numpy as np
 import time
 import os
+
+import misc_fn
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
