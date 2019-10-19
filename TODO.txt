@@ -1,0 +1,9 @@
+YH
+- redraw grid
+- add visual cues for boxes
+
+Phy
+- Draw boxes
+- Arrange track
+- the sound is weird (tune softer)
+

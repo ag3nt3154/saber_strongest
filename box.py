@@ -26,7 +26,7 @@ cyan = (0, 255, 255)
 class Box1(pygame.sprite.Sprite):
     def __init__(self, box_data):
         super().__init__()
-        self.size = 20
+        self.size = 10
         self.start_time, self.position, self.type, self.direction = box_data
         img_path = "VFX/box-" + str(self.type) + self.direction + ".png"
         self.image = pygame.image.load(img_path).convert_alpha()
@@ -44,7 +44,7 @@ class Box1(pygame.sprite.Sprite):
 
         vel_1 = 260
 
-        dsize = int(self.size + (vel_1 * 0.5/passage_time) * time_diff)
+        dsize = int(self.size + (vel_1 * 0.6/passage_time) * time_diff)
         
         
         if misc_fn.col(self.position) == 0:
